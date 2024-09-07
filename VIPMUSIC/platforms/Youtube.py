@@ -4,6 +4,7 @@ import random
 import re
 from typing import Union
 
+import config
 import httpx
 import yt_dlp
 from pyrogram.enums import MessageEntityType
@@ -11,10 +12,11 @@ from pyrogram.types import Message
 from youtubesearchpython.__future__ import VideosSearch
 
 from VIPMUSIC.utils.formatters import time_to_seconds
+from VIPMUSIC.utils.database import is_on_off
 
 
 def cookies():
-    cookie_dir = "YukkiMusic/utils/cookies"
+    cookie_dir = "cookies"
     cookies_files = [f for f in os.listdir(cookie_dir) if f.endswith(".txt")]
 
     cookie_file = os.path.join(cookie_dir, random.choice(cookies_files))
@@ -374,25 +376,21 @@ class YouTubeAPI:
             x.download([link])
 
         if songvideo:
-            # await loop.run_in_executor(None, song_video_dl)
-            # fpath = f"downloads/{title}.mp4"
-            fpath = await loop.run_in_executor(
+            await loop.run_in_executor(None, song_video_dl)
+            fpath = f"downloads/{title}.mp4"
+            #fpath = await loop.run_in_executor(
                 None, lambda: asyncio.run(api_download(vidid, video=True))
             )
             return fpath
         elif songaudio:
-            # await loop.run_in_executor(None, song_audio_dl)
-            # fpath = f"downloads/{title}.mp3"
-            fpath = await loop.run_in_executor(
+            await loop.run_in_executor(None, song_audio_dl)
+            fpath = f"downloads/{title}.mp3"
+            #fpath = await loop.run_in_executor(
                 None, lambda: asyncio.run(api_download(vidid))
             )
             return fpath
         elif video:
-            direct = True
-            downloaded_file = await loop.run_in_executor(
-                None, lambda: asyncio.run(api_download(vidid, video=True))
-            )
-            """if await is_on_off(config.YTDOWNLOADER):
+            if await is_on_off(config.YTDOWNLOADER):
                 direct = True
                 downloaded_file = await loop.run_in_executor(None, video_dl)
             else:
@@ -410,11 +408,11 @@ class YouTubeAPI:
                     downloaded_file = stdout.decode().split("\n")[0]
                     direct = None
                 else:
-                    return"""
+                    return
         else:
             direct = True
-            # downloaded_file = await loop.run_in_executor(None, audio_dl)
-            downloaded_file = await loop.run_in_executor(
+            downloaded_file = await loop.run_in_executor(None, audio_dl)
+            #downloaded_file = await loop.run_in_executor(
                 None, lambda: asyncio.run(api_download(vidid))
             )
         return downloaded_file, direct
