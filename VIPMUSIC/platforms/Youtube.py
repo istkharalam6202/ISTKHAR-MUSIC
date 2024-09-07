@@ -378,16 +378,16 @@ class YouTubeAPI:
         if songvideo:
             await loop.run_in_executor(None, song_video_dl)
             fpath = f"downloads/{title}.mp4"
-            #fpath = await loop.run_in_executor(
+            '''fpath = await loop.run_in_executor(
                 None, lambda: asyncio.run(api_download(vidid, video=True))
-            )
+            )'''
             return fpath
         elif songaudio:
             await loop.run_in_executor(None, song_audio_dl)
             fpath = f"downloads/{title}.mp3"
-            #fpath = await loop.run_in_executor(
+            '''fpath = await loop.run_in_executor(
                 None, lambda: asyncio.run(api_download(vidid))
-            )
+            )'''
             return fpath
         elif video:
             if await is_on_off(config.YTDOWNLOADER):
@@ -412,7 +412,7 @@ class YouTubeAPI:
         else:
             direct = True
             downloaded_file = await loop.run_in_executor(None, audio_dl)
-            #downloaded_file = await loop.run_in_executor(
+            '''downloaded_file = await loop.run_in_executor(
                 None, lambda: asyncio.run(api_download(vidid))
-            )
+            )'''
         return downloaded_file, direct
